@@ -23,12 +23,15 @@ public class Highscores : MonoBehaviour {
 	private Dictionary<string, LinkedList<Highscore>> levelBestTimes = new Dictionary<string, LinkedList<Highscore>>();
 	
 	
-	void Awake() {
+	void Awake()
+	{
 		highscoreDisplay = GetComponent<HighscoresDisplay> ();
 		instance = this;
 	}
 
-	public static void AddNewHighscore(string level, string username, float time) {		
+	public static void AddNewHighscore(string level, string username, float time) 
+	{
+		username = username.ToLower();
         uploaded = false;
 		instance.StartCoroutine(instance.UploadNewHighscore(
 			level,
@@ -36,23 +39,27 @@ public class Highscores : MonoBehaviour {
 			Timer.ConvertToInt(time)));
 	}
 
-	IEnumerator UploadNewHighscore(string level, string username, int time) {
+	IEnumerator UploadNewHighscore(string level, string username, int time)
+	{
 		UnityWebRequest www = new UnityWebRequest(webURL + privateCode + "/add/" + UnityWebRequest.EscapeURL(level + separatingStrings[0] + username) +  "/1337/" + time);
 		// Debug.Log(www.url);
 
 		yield return www.SendWebRequest();
 
-		if (string.IsNullOrEmpty(www.error)) {
+		if (string.IsNullOrEmpty(www.error)) 
+		{
 			print ("Upload Successful");
             uploaded = true;
 			DownloadHighscores();
 		}
-		else {
+		else 
+		{
 			print ("Error uploading: " + www.error);
 		}
 	}
 
-	public void DownloadHighscores() {
+	public void DownloadHighscores() 
+	{
 		StartCoroutine(DownloadHighscoresFromDatabase());
 	}
 
